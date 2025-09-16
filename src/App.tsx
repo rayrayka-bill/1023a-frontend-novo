@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {  useState , useEffect } from 'react'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
 
+  type EstudanteType = {
+    _id: string,
+    nome:string,
+    idade:number
+  }
+function App( ){
+ useEffect(() => {
+  fetch("/api/estudantes")
+  .then((response) => response.json())
+  .then((dados) => setEstudantes(dados))
+
+ }, [])
+
+  const [estudantes, setEstudantes] = useState<EstudanteType[]>([])
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>lista de estudantes</h1>
+      <div className="container-estudantes">
+        {
+         estudantes.map((estudantes) => { 
+        return (
+          <div key={estudantes._id}>
+            <h2>{estudantes.nome}</h2>
+            <p>idade: {estudantes.idade}</p>
+            </div>
+          )
+       })
+      }
+     </div>
     </>
   )
 }
-
 export default App
+
